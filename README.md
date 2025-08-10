@@ -15,7 +15,7 @@ This project showcases how to leverage Spring Boot for building a backend servic
 - Provides data aggregation operations: minimum, maximum, and average quantity.
 - Clean, modular code to demonstrate best practices with Spring Boot and JPA.
 
-## Tech Stack
+## Tech Stack (if you're still curious)
 
 - Java 21
 - Spring Boot 3.5.4
@@ -36,5 +36,5 @@ This project showcases how to leverage Spring Boot for building a backend servic
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/spring-data-analytics.git
+   git clone https://github.com/AdityaShankar1/spring-data-analytics.git
    cd spring-data-analytics
