@@ -1,5 +1,6 @@
 package com.shank.springanalytics.service;
 
+import com.shank.springanalytics.dto.SummaryDto;
 import com.shank.springanalytics.model.DataRecord;
 import com.shank.springanalytics.repository.DataRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,4 +183,71 @@ public class DataRecordService {
         
         System.out.println("\n" + "=".repeat(80) + "\n");
     }
-}
+
+    public SummaryDto computeSummary() {
+        List<DataRecord> records = getAllRecords(); // Fetch from DB or CSV fallback
+        SummaryDto dto = new SummaryDto();
+
+        if (records.isEmpty()) {
+            return dto; // Return empty DTO if no records
+        }
+
+        // Basic statistics
+        BigDecimal min = records.stream()
+                .map(DataRecord::getQmt)
+                .min(BigDecimal::compareTo)
+                .orElse(BigDecimal.ZERO);
+
+        BigDecimal max = records.stream()
+                .map(DataRecord::getQmt)
+                .max(BigDecimal::compareTo)
+                .orElse(BigDecimal.ZERO);
+
+        double avg = records.stream()
+                .mapToDouble(r -> r.getQmt().doubleValue())
+                .average()
+                .orElse(0.0);
+
+        double variance = records.stream()
+                .mapToDouble(r -> Math.pow(r.getQmt().doubleValue() - avg, 2))
+                .average()
+                .orElse(0.0);
+
+        double stdDev = Math.sqrt(variance);
+
+        long totalRecords = records.size();
+        BigDecimal totalProduction = records.stream()
+                .map(DataRecord::getQmt)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Find records with max and min production
+        DataRecord maxRecord = records.stream()
+                .max((r1, r2) -> r1.getQmt().compareTo(r2.getQmt()))
+                .orElse(null);
+
+        DataRecord minRecord = records.stream()
+                .min((r1, r2) -> r1.getQmt().compareTo(r2.getQmt()))
+                .orElse(null);
+
+        // Wrap double values with BigDecimal.valueOf() for the DTO
+        dto.setTotalRecords(totalRecords);
+        dto.setTotalProduction(totalProduction); // already BigDecimal
+        dto.setMinProduction(min);
+        dto.setMaxProduction(max);
+        dto.setAvgProduction(avg);
+        dto.setStdDevProduction(stdDev);
+
+        if (maxRecord != null) {
+            dto.setHighestCompany(maxRecord.getOilCompany());
+            dto.setHighestPeriod(maxRecord.getMonth() + " " + maxRecord.getYear().getValue());
+            dto.setHighestValue(maxRecord.getQmt()); // already BigDecimal
+        }
+
+        if (minRecord != null) {
+            dto.setLowestCompany(minRecord.getOilCompany());
+            dto.setLowestPeriod(minRecord.getMonth() + " " + minRecord.getYear().getValue());
+            dto.setLowestValue(minRecord.getQmt()); // already BigDecimal
+        }
+
+        return dto;
+    }}
