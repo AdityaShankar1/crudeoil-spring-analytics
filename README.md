@@ -1,7 +1,7 @@
 # crudeoil-spring-analytics
-# Spring Boot Data Analytics
+# Spring Boot Data Analytics 🌱
 
-A simple Spring Boot application demonstrating basic data analytics operations such as minimum, maximum, and average calculations on an oil production dataset.
+A simple Spring boot application for an analytics engine that takes data from MySQL and performs analysis and generates report in real-time. 
 
 ## Overview
 
@@ -18,7 +18,7 @@ This project showcases how to leverage Spring Boot for building a backend servic
 ## Future Potential
 - In theory, this setup can evolve into a *real-time report generator*. Once fully developed:  
 - Data fed into MySQL would immediately update calculations and instantaneous download of up-to-date reports
--  Fully modular ERP-style architecture
+- Fully modular ERP-style architecture
 - Reports could be generated instantaneously with a GUI for interactive report generation 
 - Continuous monitoring of datasets would be possible (ideal for frequently updating data like stock prices)
 
@@ -26,7 +26,7 @@ Currently, this project serves as a *comparative study between Spring Boot and P
 
 ## Tech Stack (if you're still curious)
 
-- Java 21
+- Java 21 
 - Spring Boot 3.5.4
 - Spring Data JPA
 - MySQL
