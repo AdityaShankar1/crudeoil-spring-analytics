@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8
+    container_name: oil-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 09012004Adi$
+      MYSQL_DATABASE: my_db
+    ports:
+      - "3307:3306"  # external:internal
+
+  app:
+    image: oil-spring
+    container_name: oil-spring-app
+    depends_on:
+      - db
+    ports:
+      - "9090:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/my_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 09012004Adi$
+    entrypoint: ["cmd", "/c", "wait-for-it.bat db 3306 -- java -jar your-app.jar"]
